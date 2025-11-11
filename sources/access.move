@@ -119,6 +119,4 @@ module scholarflow::access {
         // Step 2: Return true if present, false otherwise.
         _roles.revokers.contains(_addr)
     }
-
-    /// Test-only helper: create a Roles object for testing (not shared).
 }

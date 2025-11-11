@@ -90,8 +90,4 @@ module scholarflow::lifecycle {
 
         event::emit(GrantRevoked { grant_id: object::id(_g), by: sender });
     }
-
-    /// Optional helpers (if you expose state helpers from grant module).
-    // public fun is_active(_g: &grant::Grant): bool { abort 9001 }
-    // public fun state_of(_g: &grant::Grant): vector<u8> { abort 9001 }
 }

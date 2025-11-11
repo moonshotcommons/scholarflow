@@ -26,14 +26,6 @@ module scholarflow::grant {
         transfer::transfer(cap, publisher);
     }
 
-    #[test_only]
-    public fun init_for_testing(ctx: &mut TxContext) {
-        let cap = AdminCap { id: object::new(ctx) };
-        let publisher = tx_context::sender(ctx);
-        transfer::transfer(cap, publisher);
-    }
-
-
     public entry fun mint(
         student: address,
         amount: u64,
@@ -74,5 +66,12 @@ module scholarflow::grant {
 
     public fun state_of(_g: &Grant): vector<u8> {
         _g.state
+    }
+
+    #[test_only]
+    public fun init_for_testing(ctx: &mut TxContext) {
+        let cap = AdminCap { id: object::new(ctx) };
+        let publisher = tx_context::sender(ctx);
+        transfer::transfer(cap, publisher);
     }
 }
