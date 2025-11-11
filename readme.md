@@ -1,3 +1,10 @@
+## 部署
+
+iota client publish
+
+## 交互
+### 设置环境变量
+```
 export packageId=0x03b549cb1a44bab280f1355a85f1d3752df30abf76c445e56cc92fd06237c177
 export admCap=0x1bc831c6da3707f3ab66d931c30187a496f8c9ca9145d3b1f6763504ef4f55f4
 export upgradeCap=0xf9aa2c583f47e47aee41e5de31c2e9392511e96824cfb96d251df71838bfb3a8
@@ -7,12 +14,7 @@ export newPackageId=0x5cca6896e028727d1f6224d6c4414db35ffcac0450656d901a9b3c9dbe
 export thirdPackageId=0xff3e58d1813820926e491ef64dd420578a2a2b812d7bbd34dae93c874570fe06
 export registry=0xee397ddb300d9f69e59894ff5c02a75996b683a070f40546b7f5fbd4fd0e5ffc
 export grantV2=0xb07d3958cc093029a78861093de306cf077d3fb7aab9eb62cae4450d5634a814
-
-## 部署
-
-iota client publish
-
-## 交互
+```
 
 ### mint
 

@@ -3,7 +3,6 @@ name = "scholarflow"
 edition = "2024" # edition = "legacy" to use legacy (pre-2024) Move
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
-published-at = "0x5cca6896e028727d1f6224d6c4414db35ffcac0450656d901a9b3c9dbef1a60d"
 
 [dependencies]
 
