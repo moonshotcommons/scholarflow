@@ -11,14 +11,16 @@ module scholarflow::tests_lifecycle {
     use std::debug;
     use std::string;
 
-
+    const ENotAdmin: u64 = 1;
+    const ENotIssuer: u64 = 2;
+    const ENotRevoker: u64 = 3;
     const ADMIN: address = @0xAAA1;
+    const ISSUER: address = @0xAAA2;
+    const REVOKER: address = @0xAAA3;
     const STUDENT: address = @0xBBB1;
 
-
-    #[test]
-    fun request_and_approve_grant() {
-        debug::print(&string::utf8(b"beginning request_and_approve_grant"));
+    fun setup() {
+        debug::print(&string::utf8(b"beginning setup"));
         // Step 1: Begin scenario with ADMIN.
         let mut scenario = test_scenario::begin(ADMIN);
         {
@@ -35,6 +37,18 @@ module scholarflow::tests_lifecycle {
             access::create_roles(&admCap, scenario.ctx());
             scenario.return_to_sender<AdminCap>(admCap);
         };
+        
+        // Step 4: Create roles with AdminCap.
+        scenario.next_tx(ADMIN);
+        
+        {
+            let mut roles = scenario.take_shared<Roles>();
+            let admCap = scenario.take_from_sender<AdminCap>();
+            access::grant_role(&mut roles, b"issuer", ISSUER, &admCap);
+            access::grant_role(&mut roles, b"revoker", REVOKER, &admCap);
+            test_scenario::return_shared<Roles>(roles);
+            scenario.return_to_sender<AdminCap>(admCap);
+        };
 
         scenario.next_tx(ADMIN);
         
@@ -44,12 +58,37 @@ module scholarflow::tests_lifecycle {
             lifecycle::create_requests(&admCap, scenario.ctx());
             scenario.return_to_sender<AdminCap>(admCap);
         };
+        
+        scenario.end();
+    }
 
-        scenario.next_tx(STUDENT);
+    #[test]
+    fun roles_test() {
+        setup();
+        debug::print(&string::utf8(b"beginning roles_test"));
+
+        let mut scenario = test_scenario::begin(ADMIN);
+        {
+            let roles = scenario.take_shared<Roles>();
+            assert!(access::is_admin(&roles, ADMIN), ENotAdmin);
+            assert!(access::is_issuer(&roles, ISSUER), ENotIssuer);
+            assert!(access::is_revoker(&roles, REVOKER), ENotRevoker);
+            test_scenario::return_shared<Roles>(roles);
+        };
+        scenario.end();
+    }
+
+    #[test]
+    fun request_and_approve_grant() {
+        setup();
+
+        debug::print(&string::utf8(b"beginning request_and_approve_grant"));
+        // Step 1: Begin scenario with ADMIN.
+        let mut scenario = test_scenario::begin(STUDENT);
         
         {
             let mut requests = scenario.take_shared<Requests>();
-            // Step 6: Request grant with amount 1000.
+            // Step 2: Request grant with amount 1000.
             lifecycle::request_grant(&mut requests, 1000, scenario.ctx());
             test_scenario::return_shared<Requests>(requests);
         };
@@ -60,7 +99,7 @@ module scholarflow::tests_lifecycle {
            let mut requests = scenario.take_shared<Requests>();
            let roles = scenario.take_shared<Roles>();
            let admCap = scenario.take_from_sender<AdminCap>();
-           // Step 7: Approve grant with STUDENT.
+           // Step 3: Approve grant with ADMIN.
            lifecycle::approve_grant(&mut requests, STUDENT, &roles, &admCap, scenario.ctx());
            test_scenario::return_shared<Requests>(requests);
            test_scenario::return_shared<Roles>(roles);

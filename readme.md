@@ -3,6 +3,15 @@
 iota client publish
 
 ## 交互
+### 单元测试
+```shell
+# 指定单元测试
+iota move test roles_test
+
+# 全部单元测试
+iota move test
+```
+
 ### 设置环境变量
 ```
 export packageId=0x03b549cb1a44bab280f1355a85f1d3752df30abf76c445e56cc92fd06237c177
